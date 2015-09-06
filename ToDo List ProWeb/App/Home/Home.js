@@ -4,13 +4,15 @@
     "use strict";
 
     // The initialize function must be run each time a new page is loaded
-    Office.initialize = function (reason) {
-        $(document).ready(function () {
-            app.initialize();
+    //Office.initialize = function (reason) {
+    //    $(document).ready(function () {
+    //        app.initialize();
 
-            $('#get-data-from-selection').click(getDataFromSelection);
-        });
-    };
+    //        // get the settings object and set the list state if data is found
+    //       // React.render( App(), document.getElementById("app"));
+
+    //    });
+    //};
 
     // Reads data from current document selection and displays a notification
     function getDataFromSelection() {

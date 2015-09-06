@@ -75,11 +75,11 @@ body > div > div > div ul li span input[type="checkbox"] {
     margin-right: 0.75em;
 }
 
-#app > div > div > div > div:nth-child(2) > ul > form {
+#app > div > div > div > div > div:nth-child(2) > ul > form {
     margin: 1em;
 }
 
-#app > div > div > div > div:nth-child(2) > ul > form > span > button {
+#app > div > div > div > div > div:nth-child(2) > ul > form > span > button {
     display: inline-block;
     position: relative;
     top: -30px;
@@ -88,18 +88,18 @@ body > div > div > div ul li span input[type="checkbox"] {
     color: lightgreen;
 }
 
-  #app > div > div > div > div:nth-child(2) > ul > form > span > button:visited,#app > div > div > div > div:nth-child(2) > ul > form > span > button:hover {
+  #app > div > div > div > div > div:nth-child(2) > ul > form > span > button:visited,#app > div > div > div > div > div:nth-child(2) > ul > form > span > button:hover {
         background-color: transparent;
         color: green;
         outline: none;
     }
 
 
-#app > div > div > div > div > ul > li > button {
+#app > div > div > div > div  ul  li  button {
     color: pink;
 }
 
-    #app > div > div > div > div > ul > li > button:hover {
+    #app > div > div > div > div  ul  li  button:hover {
         color: red;
     }
 

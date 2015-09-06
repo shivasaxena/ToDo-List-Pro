@@ -4,6 +4,7 @@
 /// <reference path="bootstrap.js" />
 /// <reference path="react/react-0.13.1.min.js" />
 /// <reference path="react/react-with-addons-0.13.1.min.js" />
+/// <reference path="StorageLibrary.js" />
 /* Required to correctly initalize Office.js for intellisense */
 /// <reference path="_officeintellisense.js" />
 /* Use offline copy of Office.js for intellisense */
