@@ -14,18 +14,35 @@
         this.props.deleteItem(this);
     
     },
+    toggleCheck : function () {
+        
+        if(this.state.isChecked){
+            this.state.isChecked= false;
+        }else{
+            this.state.isChecked = true;
+        }
+
+        this.props.toggleCheck(this);
+    },
 
     render: function () {
+        
+        var cx = React.addons.classSet;
+        var classes = cx({
+            'strike-through': this.state.isChecked
+            
+        });
+
         
         return(  <li className="list-group-item">
                     
                         <span>
-                            <input type="checkbox" aria-label="..."/>
+                            <input checked = {this.state.isChecked} onClick = {this.toggleCheck} type="checkbox" aria-label="..."/>
                         </span>
                         <button className="btn btn-sm btn-link" onClick = {this.deleteItem} type="button">
                             <span className="glyphicon glyphicon-remove "  aria-hidden="true"></span>
                         </button>
-                        <span>{this.state.text}</span>
+                        <span className={classes}>{this.state.text}</span>
                         
                        
                  </li>
@@ -48,11 +65,24 @@ var List = React.createClass({
     },
     componentDidMount: function () {
         var context = this;
-        Office.initialize = function (reason) {
-            
-            var previousState = StorageLibrary.getFromPropertyBag("listState");
-            debugger;
-        };
+
+        // check if office is present then get the state from it else set it from localStorage
+        if (Office.context.document) {
+            Office.initialize = function (reason) {
+                var previousState = StorageLibrary.getValueFromStorage("listState");
+
+                context.setState(JSON.parse(previousState));
+               
+            };
+
+        } else {
+            var previousState = StorageLibrary.getValueFromStorage("listState");
+            if (previousState) {
+                context.setState(JSON.parse(previousState));
+            }
+
+        }
+        
 
     },
     addItem :function(item){
@@ -77,26 +107,22 @@ var List = React.createClass({
         newState.listItems = newItems;
         newState.counter = counter;
         this.setState(newState);
-        var previousState = StorageLibrary.getFromPropertyBag("listState");
-        debugger;
-        StorageLibrary.saveToPropertyBag("listState", JSON.stringify(newState));
-        Office.context.document.settings.saveAsync(function (asyncResult) {
-            if (asyncResult.status == Office.AsyncResultStatus.Failed) {
-                console.log('Settings save failed. Error: ' + asyncResult.error.message);
-            } else {
-                console.log('Settings saved.');
-            }
-        });
+       
+        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
+       
         
     
     },
-    changeListName: function(element){
-        this.state.listName = element.value; 
+    changeListName: function (element) {
+
+        var newState = this.state;
+        newState.listName = element.value;
+        this.setState(newState);
+
+        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(this.state));
     },
 
     deleteItem : function(element){
-        console.log(element.props.itemDetail);
-
         var index = this.state.listItems.indexOf(element.props.itemDetail);
         var length =this.state.listItems.length;
         var newState = this.state;
@@ -110,7 +136,17 @@ var List = React.createClass({
             newState.listItems =  oldStateItems;
         }		
         this.setState(newState);
+        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
     
+    },
+    toggleCheck: function (item) {
+        var index = this.state.listItems.indexOf(item.props.itemDetail);
+        var oldStateItems = this.state.listItems;
+        var newList = oldStateItems;
+        newList[index] = item.state;
+        this.setState(newList);
+
+        
     },
     reRenderForSavedState : function(savedState) {
         this.setState(savedState);
@@ -119,13 +155,16 @@ var List = React.createClass({
             var context = this;
             var listItemsElements = this.state.listItems.map(function(item){
                 
-                return(<ListItem key = {item.key} deleteItem= {context.deleteItem} itemDetail = {item}/>	);
+                return(<ListItem key = {item.key} deleteItem= {context.deleteItem} toggleCheck ={context.toggleCheck} itemDetail = {item}/>	);
                  
             });
+       
+        
             return(
+
             <div id = "list">
-                <ListHeading changeListName	= {context.changeListName} />
-            
+                <ListHeading changeListName	= {context.changeListName} listName = {context.state.listName} />
+                
                 <div>
                         <ul className="list-group">
                         <ListAddTextBox addItem = {context.addItem}/>
@@ -147,7 +186,7 @@ var ListAddTextBox = React.createClass({
             return(<form onSubmit={this.addItemToList}>
 
                 
-                  <input type="text" className="form-control" ref= "listItem" placeholder="Add Item to List"/>
+                  <input type="text" className="form-control" ref= "listItemInput" placeholder="Add Item to List"/>
                   <span className="">
                     <button className="btn btn-link pull-right " type="submit" >
                         <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -161,11 +200,10 @@ var ListAddTextBox = React.createClass({
     },
     addItemToList : function(event){
         event.preventDefault();
-
-        var listItem = React.findDOMNode(this.refs.listItem);
-        
-        this.props.addItem(listItem);
-        listItem.value = "";
+        var listItemInput = React.findDOMNode(this.refs.listItemInput);
+        this.props.addItem(listItemInput);
+        listItemInput.value = "";
+        listItemInput.focus();
         
     }
 
@@ -173,11 +211,22 @@ var ListAddTextBox = React.createClass({
 
 var ListHeading = React.createClass({
 
+    getInitialState : function () {
+        return {};
+    },
+    componentDidMount: function () {
+        var data = {};
+       
+       
+    },
     render: function () {
-
+        
             return( <div className="panel-heading">
                         <form onSubmit={this.changeListName} >
-                            <input type="text" ref = "listNameElement" className="form-control" placeholder="Enter A Cool Name" />
+                            <input type="text" ref = "listNameElement" className="form-control"  />
+                             <button className="btn btn-link pull-right " type="submit">
+                                <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                             </button>
                         </form>
                      </div>
             );
@@ -187,6 +236,7 @@ var ListHeading = React.createClass({
         event.preventDefault();
         var listName = React.findDOMNode(this.refs.listNameElement);
         this.props.changeListName(listName);
+        listName.blur();
     }
 
 });

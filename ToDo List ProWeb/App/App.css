@@ -103,3 +103,10 @@ body > div > div > div ul li span input[type="checkbox"] {
         color: red;
     }
 
+.strike-through {
+text-decoration: line-through;
+}
+#list > div.panel-heading > form > button {
+    position: relative;
+    top: -35px;
+}

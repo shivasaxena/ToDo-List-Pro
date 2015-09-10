@@ -5,6 +5,44 @@
 // Create a "utility class" for the storage functions.
 var StorageLibrary = (function () {
 
+    // Stores the settings in the JavaScript APIs for Office property bag,if not availabe then to local storage 
+    //and if localstorage is not present too then in the document
+    function saveValueIntoStorage(key, value) {
+        debugger;
+
+        if (Office.context.document && Office.context.document.settings) {
+            Office.context.document.settings.set(key, value);
+            
+
+        } else if (lsTest() === true) {
+            saveToLocalStorage(key, value);
+
+
+        }else {
+            throw new Error("Office or/and Local Storage was not found data cant be stored");
+        }
+
+
+    }
+
+    // get value from office, if not availabe fall back to localStorage
+
+    function getValueFromStorage(key) {
+
+        if (Office.context.document && Office.context.document.settings) {
+            return getFromPropertyBag(key);
+
+        } else if (lsTest() === true) {
+           return  getFromLocalStorage(key);
+
+
+        } else {
+            throw new Error("Office or/and Local Storage was not found data cant be stored");
+        }
+
+
+    }
+
     // Stores the settings in the JavaScript APIs for Office property bag.
     function saveToPropertyBag(key, value) {
 
@@ -19,6 +57,18 @@ var StorageLibrary = (function () {
                 message: "The settings object is not supported in this host application."
             };
             throw unsupportedError;
+        }
+    }
+
+    // helper function to check that local storage is available or not
+    function lsTest() {
+        var test = 'test';
+        try {
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (e) {
+            return false;
         }
     }
 
@@ -149,7 +199,10 @@ var StorageLibrary = (function () {
         saveToSessionStorage: saveToSessionStorage,
         getFromSessionStorage: getFromSessionStorage,
         saveToDocument: saveToDocument,
-        getFromDocument: getFromDocument
+        getFromDocument: getFromDocument,
+        saveValueIntoStorage: saveValueIntoStorage,
+        getValueFromStorage: getValueFromStorage
+
     };
 
 })();
