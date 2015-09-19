@@ -8,11 +8,13 @@ var StorageLibrary = (function () {
     // Stores the settings in the JavaScript APIs for Office property bag,if not availabe then to local storage 
     //and if localstorage is not present too then in the document
     function saveValueIntoStorage(key, value) {
-        debugger;
+      
 
         if (Office.context.document && Office.context.document.settings) {
             Office.context.document.settings.set(key, value);
-            
+            Office.context.document.settings.saveAsync(function (asyncResult) {
+                console.log('Settings saved with status: ' + asyncResult.status);
+            });
 
         } else if (lsTest() === true) {
             saveToLocalStorage(key, value);
@@ -30,6 +32,7 @@ var StorageLibrary = (function () {
     function getValueFromStorage(key) {
 
         if (Office.context.document && Office.context.document.settings) {
+          
             return getFromPropertyBag(key);
 
         } else if (lsTest() === true) {
@@ -79,6 +82,7 @@ var StorageLibrary = (function () {
         // Need to check that the settings object is available before setting.
         if (Office.context.document.settings) {
             var value = null;
+            
             value = Office.context.document.settings.get(key);
             return value;
         }

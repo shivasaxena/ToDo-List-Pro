@@ -82,15 +82,25 @@ body > div > div > div ul li span input[type="checkbox"] {
 #app > div > div > div > div > div:nth-child(2) > ul > form > span > button {
     display: inline-block;
     position: relative;
-    top: -30px;
+    top: -35px;
     right: 5px;
     float: right;
     color: lightgreen;
 }
+#list > div.panel-heading > form > input {
+    color:white;
+}
 
-  #app > div > div > div > div > div:nth-child(2) > ul > form > span > button:visited,#app > div > div > div > div > div:nth-child(2) > ul > form > span > button:hover {
+#list > div.panel-heading > form > input: {
+    text-shadow:2px 2px 0 #ccc;
+}
+
+  #list > div.panel-heading > form > button{
         background-color: transparent;
-        color: green;
+       padding:0;
+       margin-top: 5px;
+       right: 15px;
+        color:lightgreen;
         outline: none;
     }
 
@@ -110,3 +120,52 @@ text-decoration: line-through;
     position: relative;
     top: -35px;
 }
+
+.hide {
+    display: none;
+visibility: hidden !important;
+
+}
+
+.show {
+visibility: visible !important;
+
+}
+.fade-enter {
+  
+  transition: all 0.5s linear;
+  
+}
+
+.fade-enter.fade-enter-active {
+    font-size: 1em;
+    background-color:#deeffb;
+}
+
+.fade-leave {
+    opacity: 1;
+    -moz-transition: all .5s linear;
+    -o-transition: all .5s linear;
+    -webkit-transition: all .5s linear;
+    transition: all .5s linear;
+}
+
+    .fade-leave.fade-leave-active {
+        opacity: 0.01;
+        -moz-transition: all 0.5s linear;
+        -o-transition: all 0.5s linear;
+        -webkit-transition: all 0.5s linear;
+        transition: all .5s linear;
+        background-color: #e6d83c;
+    }
+
+.fade-appear {
+    opacity: 0.01;
+    
+
+}
+
+.fade-appear.fade-appear-active {
+  opacity: 1;
+}
+

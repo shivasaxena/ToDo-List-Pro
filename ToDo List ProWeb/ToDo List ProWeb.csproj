@@ -60,9 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\App.jsx" />
-    <None Include=".bin\bower.cmd" />
-    <None Include=".bin\git.cmd" />
-    <None Include=".bin\node.cmd" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -76,18 +73,13 @@
     <Content Include="App\Home\Home.css" />
     <Content Include="App\Home\Home.html" />
     <Content Include="App\Home\Home.js" />
-    <Content Include="Content\bootstrap-theme-flatty.min.css" />
     <Content Include="Content\bootstrap-theme-paper.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Office.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\Close.png" />
+    <Content Include="Images\TODO-List-icon32X32.png" />
+    <Content Include="Images\TODO-List-icon64x64.png" />
     <Content Include="packages.config" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

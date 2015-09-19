@@ -1,297 +1,262 @@
 ﻿var ListItem = React.createClass({
-    getInitialState : function() {
-        
-                return {};
+    getInitialState: function() {
+        return {};
     },
-
-    componentDidMount : function(){
-        var data= {};
+    componentDidMount: function() {
+        var data = {};
         data.isChecked = this.props.itemDetail.isChecked;
         data.text = this.props.itemDetail.text;
         this.setState(data);
     },
-    deleteItem : function(){
+    deleteItem: function() {
         this.props.deleteItem(this);
-    
     },
-    toggleCheck : function () {
-        
-        if(this.state.isChecked){
-            this.state.isChecked= false;
-        }else{
+    toggleCheck: function() {
+        if(this.state.isChecked) {
+            this.state.isChecked = false;
+        } else {
             this.state.isChecked = true;
         }
-
         this.props.toggleCheck(this);
     },
-
-    render: function () {
-        
+    render: function() {
         var cx = React.addons.classSet;
         var classes = cx({
             'strike-through': this.state.isChecked
-            
         });
+        return(
+            <li className="list-group-item">
 
-        
-        return(  <li className="list-group-item">
-                    
-                        <span>
-                            <input checked = {this.state.isChecked} onClick = {this.toggleCheck} type="checkbox" aria-label="..."/>
-                        </span>
-                        <button className="btn btn-sm btn-link" onClick = {this.deleteItem} type="button">
-                            <span className="glyphicon glyphicon-remove "  aria-hidden="true"></span>
+
+                        <input checked={this.state.isChecked} onClick={this.toggleCheck} type="checkbox" aria-label="..." />
+
+                        <button className="btn btn-sm btn-link" onClick={this.deleteItem} type="button">
+                            <span className="glyphicon glyphicon-remove " aria-hidden="true"></span>
                         </button>
                         <span className={classes}>{this.state.text}</span>
-                        
-                       
-                 </li>
-        );
 
+
+
+            </li>
+        );
     }
 });
-
 var List = React.createClass({
-
-    getInitialState: function(){
+    getInitialState: function() {
         return {
-                    listName : "",
-                    listItems : [],
-                    counter: 0
+            listName: "",
+            listItems: [],
+            counter: 0
         };
-
-
-
     },
-    componentDidMount: function () {
+    componentDidMount: function() {
         var context = this;
-
         // check if office is present then get the state from it else set it from localStorage
-        if (Office.context.document) {
-            Office.initialize = function (reason) {
-                var previousState = StorageLibrary.getValueFromStorage("listState");
-
-                context.setState(JSON.parse(previousState));
-               
-            };
-
-        } else {
+        Office.initialize = function(reason) {
             var previousState = StorageLibrary.getValueFromStorage("listState");
-            if (previousState) {
+            context.setState(JSON.parse(previousState));
+        };
+        if(Office.context.document) {} else {
+            var previousState = StorageLibrary.getValueFromStorage("listState");
+            if(previousState) {
                 context.setState(JSON.parse(previousState));
             }
-
         }
-        
-
     },
-    addItem :function(item){
-
+    addItem: function(item) {
         var textValue = item.value;
         /*If List item is empty then return*/
-
-        if(!textValue){
+        if(!textValue) {
             console.warn("Empty Item was tried to be inserted");
             return;
         }
-        var counter = this.state.counter +1;
-
+        var counter = this.state.counter + 1;
         var listItem = {
             isChecked: false,
-            text : textValue,
-            key : counter
+            text: textValue,
+            key: counter
         };
-
         var newItems = this.state.listItems.concat(listItem);
         var newState = this.state;
         newState.listItems = newItems;
         newState.counter = counter;
         this.setState(newState);
-       
         StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
-       
-        
-    
     },
-    changeListName: function (element) {
-
+    changeListName: function(element) {
         var newState = this.state;
         newState.listName = element.value;
         this.setState(newState);
-
         StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(this.state));
     },
-
-    deleteItem : function(element){
+    deleteItem: function(element) {
         var index = this.state.listItems.indexOf(element.props.itemDetail);
-        var length =this.state.listItems.length;
+        var length = this.state.listItems.length;
         var newState = this.state;
-        if(length === 1 && index === 0 ){
-             newState.listItems =  [];
-        }
-        else{
-            
+        if(length === 1 && index === 0) {
+            newState.listItems = [];
+        } else {
             var oldStateItems = this.state.listItems;
-            var deletedItem = oldStateItems.splice(index ,1);
-            newState.listItems =  oldStateItems;
-        }		
+            var deletedItem = oldStateItems.splice(index, 1);
+            newState.listItems = oldStateItems;
+        }
         this.setState(newState);
         StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
-    
     },
-    toggleCheck: function (item) {
+    toggleCheck: function(item) {
         var index = this.state.listItems.indexOf(item.props.itemDetail);
-        var oldStateItems = this.state.listItems;
+        var oldStateItems = this.state;
         var newList = oldStateItems;
-        newList[index] = item.state;
-        this.setState(newList);
 
-        
+        newList.listItems[index] = item.state;
+        this.setState(newList);
+        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newList));
     },
-    reRenderForSavedState : function(savedState) {
+    reRenderForSavedState: function(savedState) {
         this.setState(savedState);
     },
-    render: function () {
-            var context = this;
-            var listItemsElements = this.state.listItems.map(function(item){
-                
-                return(<ListItem key = {item.key} deleteItem= {context.deleteItem} toggleCheck ={context.toggleCheck} itemDetail = {item}/>	);
-                 
-            });
-       
-        
-            return(
+    render: function() {
+        var context = this;
+        var listLeftItemsElements = this.state.listItems.map(function(item) {
+            if(!item.isChecked) {
+                return(<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
+            }
+        });
+        var listDoneItemsElements = this.state.listItems.map(function(item) {
+            if(item.isChecked) {
+                return(<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
+            }
+        });
+        return(
+            <div id="list" className="panel panel-primary">
+               <ListHeading key={context.state.listName} className="panel-title" changeListName={context.changeListName} listName={context.state.listName} />
 
-            <div id = "list">
-                <ListHeading changeListName	= {context.changeListName} listName = {context.state.listName} />
-                
                 <div>
-                        <ul className="list-group">
-                        <ListAddTextBox addItem = {context.addItem}/>
-                            {listItemsElements}
-                        </ul>
+                   <React.addons.CSSTransitionGroup transitionName="fade" transitionAppear={false} className="list-group" component='ul'>
+
+                        <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
+                       {listLeftItemsElements}
+                       {listDoneItemsElements}
+
+                   </React.addons.CSSTransitionGroup>
                 </div>
             </div>
-            );
-
+        );
     }
-
 });
-
-
 var ListAddTextBox = React.createClass({
+    getInitialState: function() {
+        return {
+            submitBtnClasses: "btn btn-link pull-right hide"
+        };
+    },
+    showSubmitBtn: function() {
+        this.setState({
+            submitBtnClasses: "btn btn-link pull-right show"
+        });
+    },
+    hideSubmitBtn: function() {
+        var listItemInput = React.findDOMNode(this.refs.listItemInput);
+        if(listItemInput.value == "") {
+            this.setState({
+                submitBtnClasses: "btn btn-link pull-right hide"
+            });
+        }
+    },
+    render: function() {
+        return(<form onSubmit={this.addItemToList}>
 
-    render: function () {
 
-            return(<form onSubmit={this.addItemToList}>
-
-                
-                  <input type="text" className="form-control" ref= "listItemInput" placeholder="Add Item to List"/>
+                  <input type="text" className="form-control" ref="listItemInput" tabindex="1" placeholder="Add Item to List" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
                   <span className="">
-                    <button className="btn btn-link pull-right " type="submit" >
+                    <button className={this.state.submitBtnClasses} type="submit">
                         <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
                     </button>
                   </span>
-            
-                    
-                    </form>
-            );
 
+
+        </form>);
     },
-    addItemToList : function(event){
+    addItemToList: function(event) {
         event.preventDefault();
         var listItemInput = React.findDOMNode(this.refs.listItemInput);
         this.props.addItem(listItemInput);
         listItemInput.value = "";
         listItemInput.focus();
-        
     }
-
 });
-
 var ListHeading = React.createClass({
+    getInitialState: function() {
+        return {
+            submitBtnClasses: "btn btn-link pull-right hide"
+        };
+    },
+    componentDidMount: function() {
+        var listName = React.findDOMNode(this.refs.listNameElement);
+        listName.value = this.props.listName;
+    },
+    showSubmitBtn: function() {
+        this.setState({
+            submitBtnClasses: "btn btn-link pull-right show"
+        });
+    },
+    hideSubmitBtn: function() {
+        var listName = React.findDOMNode(this.refs.listNameElement);
+        if(listName.value == this.props.listName) {
+            this.setState({
+                submitBtnClasses: "btn btn-link pull-right hide"
+            });
+        }
+    },
+    render: function() {
+        return(<div className="panel-heading">
 
-    getInitialState : function () {
-        return {};
-    },
-    componentDidMount: function () {
-        var data = {};
-       
-       
-    },
-    render: function () {
-        
-            return( <div className="panel-heading">
-                        <form onSubmit={this.changeListName} >
-                            <input type="text" ref = "listNameElement" className="form-control"  />
-                             <button className="btn btn-link pull-right " type="submit">
+                        <form onSubmit={this.changeListName}>
+
+                            <input type="text" ref="listNameElement" className="form-control" placeholder="Enter List Name" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
+                             <button className={this.state.submitBtnClasses} type="submit">
                                 <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
                              </button>
                         </form>
-                     </div>
-            );
-
+        </div>);
     },
-    changeListName : function(event){
+    changeListName: function(event) {
         event.preventDefault();
         var listName = React.findDOMNode(this.refs.listNameElement);
         this.props.changeListName(listName);
         listName.blur();
     }
-
 });
-
 var ListPannel = React.createClass({
+    render: function() {
+        return(<div>
 
-    render: function () {
-
-            return( <div className="panel panel-default">
-                        
-                        <List/>
-                    </div>
-            );
-
+                        <List />
+        </div>);
     }
-
 });
-
 var NavBar = React.createClass({
-
-    render: function () {
-
-            return(   <nav className="navbar navbar-inverse">
+    componentDidMount: function() {
+        $("[data-toggle=tooltip]").tooltip();
+    },
+    render: function() {
+        return(<nav className="navbar navbar-inverse">
                         <div className="container-fluid">
-                            
-                            <button type="button" className="btn btn-default navbar-btn" aria-label="Left Align">
-                                <span className="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                            </button>
-                            <button type="button" className="btn btn-default navbar-btn" aria-label="Left Align">
-                                <span className="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                            </button>
+
+                           
+
                         </div>
-                    </nav>
-            );
-
+        </nav>);
     }
-
 });
-
 var App = React.createClass({
-
-    render: function () {
-
-            return( <div>
-                        <NavBar/>
+    render: function() {
+        return(<div>
+                        <NavBar />
                         <div className="container">
-                            <ListPannel/>
+                            <ListPannel />
                         </div>
-                    </div>
-                    
-                    
-            );
-
+        </div>);
     }
-
 });
-
-React.render( <App/>, document.getElementById("app"));
+React.render(<App />, document.getElementById("app"));
