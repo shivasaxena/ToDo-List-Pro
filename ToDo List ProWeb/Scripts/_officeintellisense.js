@@ -4,7 +4,7 @@ var Office = new function() {
     this._appContext = 19;
     this._showAll = false;
     this._setContext = {
-        
+        SETTINGS: "1.1"
     };
 }
 
