@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
   <Id>799175eb-3fa7-4893-9df3-1e8cfedf6d65</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Shiva Saxena</ProviderName>
@@ -8,15 +8,18 @@
   <DisplayName DefaultValue="ToDo List Pro" />
   <Description DefaultValue="ToDo List Pro is a productivity application for the Microsoft® Office® , using which you can maintain a ToDo List in document. &#xD;&#xA;It automatically saves the list with the document. So the next time you open the document it will be there."/>
   <IconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon32X32.png" />
-  <SupportUrl DefaultValue="http://todolist.metalop.com/#support" />
-  <!--The HighResolutionIcon element is commented because it is valid only for 1.1 (or above) versions of the manifest.
-      To use this property, convert this manifest to version 1.1 by adding an API set in the Activation tab of the manifest editor.-->
-  <!--<HighResolutionIconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon64x64.png" />-->
-  <Capabilities>
-    <Capability Name="Workbook" />
-    <Capability Name="Presentation" />
-    <Capability Name="Document" />
-  </Capabilities>
+  <HighResolutionIconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon64x64.png" />
+  <SupportUrl DefaultValue="https://metalop.com/ToDo-List-Pro/#support" />
+  <Hosts>
+    <Host Name="Workbook" />
+    <Host Name="Presentation" />
+    <Host Name="Document" />
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Settings" MinVersion="1.1" />
+    </Sets>
+  </Requirements>
   <DefaultSettings>
     <SourceLocation DefaultValue="~remoteAppUrl/App/Home/Home.html" />
   </DefaultSettings>
