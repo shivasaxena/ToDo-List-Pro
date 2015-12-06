@@ -5,23 +5,110 @@
 // Create a "utility class" for the storage functions.
 var StorageLibrary = (function () {
 
+    var KEY_WORD_MESSAGE_STORAGE = "WordHostMessage";
+    var KEY_WORD_ONLINE_STORAGE_KEY = "";
+    var DOCUMENT_URL_KEY = "UniqueId"
+
     // Stores the settings in the JavaScript APIs for Office property bag,if not availabe then to local storage 
     //and if localstorage is not present too then in the document
-    function saveValueIntoStorage(key, value) {
-      
 
-        if (Office.context.document && Office.context.document.settings) {
+    function gup(name, url) {
+        if (!url) url = location.href;
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(url);
+        return results == null ? "" : results[1];
+    }
+   
+
+    function saveValueIntoStorage(key, value) {
+
+
+        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
             Office.context.document.settings.set(key, value);
             Office.context.document.settings.saveAsync(function (asyncResult) {
                 console.log('Settings saved with status: ' + asyncResult.status);
             });
 
+            //Check if its Word Online than save a copy in the local storage and display a message
+
+            if (isWordHost()) {
+                var KEY_WORD_ONLINE_STORAGE_KEY = gup(DOCUMENT_URL_KEY, Office.context.document.url);
+               
+                saveToLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY + key, value);
+                //display a message 
+                if (!checkMessageForWord(KEY_WORD_ONLINE_STORAGE_KEY)) {
+                    
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-full-width",
+                        "preventDuplicates": false,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": 0,
+                        "extendedTimeOut": 0,
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut",
+                        "tapToDismiss": false
+                    }
+
+                    toastr["warning"]("Due to a limitation in WordOnline the lists will be available in the documents only if you use the same browser to open this document again.</br> This issue is Only Limted to Word Online.");
+
+                   
+                    // save the values in the settings as well as local storage
+                    Office.context.document.settings.set(KEY_WORD_MESSAGE_STORAGE, true);
+                    saveToLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY+KEY_WORD_MESSAGE_STORAGE, true);
+                    Office.context.document.settings.saveAsync(function (asyncResult) {
+                        console.log('Settings saved with status: ' + asyncResult.status);
+                    });
+
+                }
+
+            };
+
         } else if (lsTest() === true) {
             saveToLocalStorage(key, value);
 
 
-        }else {
+        } else {
             throw new Error("Office or/and Local Storage was not found data cant be stored");
+        }
+
+
+    }
+
+    function checkMessageForWord(KEY_WORD_ONLINE_STORAGE_KEY) {
+
+        var value = null;
+        debugger;
+        if (Office.context.document.url != "") {
+            try {
+                getFromPropertyBag(KEY_WORD_ONLINE_STORAGE_KEY+KEY_WORD_MESSAGE_STORAGE);
+            } catch (e) {
+                //handle the case if the application is not running in office 
+                return getFromLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY+KEY_WORD_MESSAGE_STORAGE);
+            }
+            return getFromLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY+KEY_WORD_MESSAGE_STORAGE);
+        } else {
+            return true;
+        }
+       
+
+
+    }
+    function isWordHost() {
+
+        if (OSF.DDA.WordDocument && Microsoft.Office.WebExtension.context.document instanceof OSF.DDA.WordDocument) {
+            return true;
+        } else {
+
+            return false;
         }
 
 
@@ -31,12 +118,21 @@ var StorageLibrary = (function () {
 
     function getValueFromStorage(key) {
 
-        if (Office.context.document && Office.context.document.settings) {
-          
-            return getFromPropertyBag(key);
+        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
+
+            //try to retrive the value from settings if not present in case of word fall back to localstorage
+            var returnValue = getFromPropertyBag(key);
+
+            if (!returnValue && isWordHost()) {
+                var
+                KEY_WORD_ONLINE_STORAGE_KEY = gup(DOCUMENT_URL_KEY, Office.context.document.url);
+                returnValue = getFromLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY + key);
+            }
+           
+            return returnValue;
 
         } else if (lsTest() === true) {
-           return  getFromLocalStorage(key);
+            return getFromLocalStorage(key);
 
 
         } else {
@@ -82,7 +178,7 @@ var StorageLibrary = (function () {
         // Need to check that the settings object is available before setting.
         if (Office.context.document.settings) {
             var value = null;
-            
+
             value = Office.context.document.settings.get(key);
             return value;
         }

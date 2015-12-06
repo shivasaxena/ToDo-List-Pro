@@ -49,19 +49,20 @@ var List = React.createClass({
             counter: 0
         };
     },
+    componenetDidUpdate: function(){
+       
+    },
     componentDidMount: function() {
         var context = this;
+       
         // check if office is present then get the state from it else set it from localStorage
         Office.initialize = function(reason) {
-            var previousState = StorageLibrary.getValueFromStorage("listState");
+           
+            var previousState = StorageLibrary.getValueFromStorage(CONSTANTS.LIST_STATE_KEY);
             context.setState(JSON.parse(previousState));
         };
-        if(Office.context.document) {} else {
-            var previousState = StorageLibrary.getValueFromStorage("listState");
-            if(previousState) {
-                context.setState(JSON.parse(previousState));
-            }
-        }
+       
+
     },
     addItem: function(item) {
         var textValue = item.value;
@@ -81,13 +82,13 @@ var List = React.createClass({
         newState.listItems = newItems;
         newState.counter = counter;
         this.setState(newState);
-        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
+        StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newState));
     },
     changeListName: function(element) {
         var newState = this.state;
         newState.listName = element.value;
         this.setState(newState);
-        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(this.state));
+        StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
     deleteItem: function(element) {
         var index = this.state.listItems.indexOf(element.props.itemDetail);
@@ -101,7 +102,7 @@ var List = React.createClass({
             newState.listItems = oldStateItems;
         }
         this.setState(newState);
-        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newState));
+        StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newState));
     },
     toggleCheck: function(item) {
         var index = this.state.listItems.indexOf(item.props.itemDetail);
@@ -110,7 +111,7 @@ var List = React.createClass({
 
         newList.listItems[index] = item.state;
         this.setState(newList);
-        StorageLibrary.saveValueIntoStorage("listState", JSON.stringify(newList));
+        StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newList));
     },
     reRenderForSavedState: function(savedState) {
         this.setState(savedState);
@@ -183,6 +184,7 @@ var ListAddTextBox = React.createClass({
         this.props.addItem(listItemInput);
         listItemInput.value = "";
         listItemInput.focus();
+        return false;
     }
 });
 var ListHeading = React.createClass({
@@ -239,11 +241,17 @@ var NavBar = React.createClass({
     componentDidMount: function() {
         $("[data-toggle=tooltip]").tooltip();
     },
+    clearList: function () {
+
+        console.log(List);
+        List.bind(null);
+    },
+    
     render: function() {
         return(<nav className="navbar navbar-inverse">
                         <div className="container-fluid">
 
-                           
+                         
 
                         </div>
         </nav>);

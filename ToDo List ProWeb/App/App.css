@@ -1,5 +1,9 @@
 ﻿/* Common app styling */
+body, #app{
+background-color:#EFEFEF;
 
+}
+input[type=text]::-ms-clear { display: none; }
 #content-header {
     background: #2a8dd4;
     color: #fff;
@@ -168,4 +172,3 @@ visibility: visible !important;
 .fade-appear.fade-appear-active {
   opacity: 1;
 }
-
