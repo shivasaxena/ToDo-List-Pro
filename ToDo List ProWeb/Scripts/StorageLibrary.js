@@ -31,6 +31,9 @@ var StorageLibrary = (function () {
                 console.log('Settings saved with status: ' + asyncResult.status);
             });
 
+            //Check if its Word Online than save a copy in the local storage and display a message
+
+            
 
         } else if (lsTest() === true) {
             saveToLocalStorage(key, value);
@@ -43,6 +46,7 @@ var StorageLibrary = (function () {
 
     }
 
+
     // get value from office, if not availabe fall back to localStorage
 
     function getValueFromStorage(key) {
@@ -51,13 +55,6 @@ var StorageLibrary = (function () {
 
             //try to retrive the value from settings if not present in case of word fall back to localstorage
             var returnValue = getFromPropertyBag(key);
-
-            if (!returnValue && isWordHost()) {
-                var
-                KEY_WORD_ONLINE_STORAGE_KEY = gup(DOCUMENT_URL_KEY, Office.context.document.url);
-                returnValue = getFromLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY + key);
-            }
-           
             return returnValue;
 
         } else if (lsTest() === true) {
