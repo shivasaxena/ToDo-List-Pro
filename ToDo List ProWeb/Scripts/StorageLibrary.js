@@ -5,22 +5,38 @@
 // Create a "utility class" for the storage functions.
 var StorageLibrary = (function () {
 
+    var KEY_WORD_MESSAGE_STORAGE = "WordHostMessage";
+    var KEY_WORD_ONLINE_STORAGE_KEY = "";
+    var DOCUMENT_URL_KEY = "UniqueId"
+
     // Stores the settings in the JavaScript APIs for Office property bag,if not availabe then to local storage 
     //and if localstorage is not present too then in the document
-    function saveValueIntoStorage(key, value) {
-      
 
-        if (Office.context.document && Office.context.document.settings) {
+    function gup(name, url) {
+        if (!url) url = location.href;
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(url);
+        return results == null ? "" : results[1];
+    }
+   
+
+    function saveValueIntoStorage(key, value) {
+
+
+        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
             Office.context.document.settings.set(key, value);
             Office.context.document.settings.saveAsync(function (asyncResult) {
                 console.log('Settings saved with status: ' + asyncResult.status);
             });
 
+
         } else if (lsTest() === true) {
             saveToLocalStorage(key, value);
 
 
-        }else {
+        } else {
             throw new Error("Office or/and Local Storage was not found data cant be stored");
         }
 
@@ -31,12 +47,21 @@ var StorageLibrary = (function () {
 
     function getValueFromStorage(key) {
 
-        if (Office.context.document && Office.context.document.settings) {
-          
-            return getFromPropertyBag(key);
+        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
+
+            //try to retrive the value from settings if not present in case of word fall back to localstorage
+            var returnValue = getFromPropertyBag(key);
+
+            if (!returnValue && isWordHost()) {
+                var
+                KEY_WORD_ONLINE_STORAGE_KEY = gup(DOCUMENT_URL_KEY, Office.context.document.url);
+                returnValue = getFromLocalStorage(KEY_WORD_ONLINE_STORAGE_KEY + key);
+            }
+           
+            return returnValue;
 
         } else if (lsTest() === true) {
-           return  getFromLocalStorage(key);
+            return getFromLocalStorage(key);
 
 
         } else {
@@ -82,7 +107,7 @@ var StorageLibrary = (function () {
         // Need to check that the settings object is available before setting.
         if (Office.context.document.settings) {
             var value = null;
-            
+
             value = Office.context.document.settings.get(key);
             return value;
         }

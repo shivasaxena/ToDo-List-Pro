@@ -32,3 +32,8 @@ var app = (function () {
     return app;
 })();
 
+CONSTANTS = {
+
+    "LIST_STATE_KEY": "listState"
+
+};

@@ -6,7 +6,7 @@
   <ProviderName>Shiva Saxena</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="ToDo List Pro" />
-  <Description DefaultValue="ToDo List Pro is a productivity application for the Microsoft® Office® , using which you can maintain a ToDo List in document. &#xD;&#xA;It automatically saves the list with the document. So the next time you open the document it will be there."/>
+  <Description DefaultValue="ToDo List Pro is a productivity application for the Microsoft® Office® , using which you can maintain a ToDo List in document. &#xD;&#xA;List are automatically saved are are available later.&#xD;&#xA;Internet Explorer less than 11 are currently not supported.&#xD;&#xA;"/>
   <IconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon32X32.png" />
   <HighResolutionIconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon64x64.png" />
   <SupportUrl DefaultValue="https://metalop.com/ToDo-List-Pro/#support" />
