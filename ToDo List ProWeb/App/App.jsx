@@ -1,73 +1,90 @@
 ﻿var ListItem = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {};
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
         var data = {};
         data.isChecked = this.props.itemDetail.isChecked;
         data.text = this.props.itemDetail.text;
         this.setState(data);
+       
+        
     },
-    deleteItem: function() {
+    deleteItem: function () {
         this.props.deleteItem(this);
     },
-    toggleCheck: function() {
-        if(this.state.isChecked) {
+    toggleCheck: function () {
+        console.log("called");
+        if (this.state.isChecked) {
             this.state.isChecked = false;
         } else {
             this.state.isChecked = true;
         }
         this.props.toggleCheck(this);
     },
-    render: function() {
+    render: function () {
         var cx = React.addons.classSet;
-        var classes = cx({
+        var listItemClasses = cx({
+            'is-selected': this.state.isChecked,
+            'ms-ListItem': true,
+            'is-unread': !this.state.isChecked,
+            'is-selectable': true,
+            'ms-u-fadeIn500': true,
+            'adjustCheckIconPosition':true,
+            'ms-bgColor-white': true,
+            'whiteBackground':true
+        });
+        var listItemTextClasses = cx({
+            'ms-ListItem-tertiaryTextCustom': true,
             'strike-through': this.state.isChecked
         });
-        return(
-            <li className="list-group-item">
-
-
-                        <input checked={this.state.isChecked} onClick={this.toggleCheck} type="checkbox" aria-label="..." />
-
-                        <button className="btn btn-sm btn-link" onClick={this.deleteItem} type="button">
-                            <span className="glyphicon glyphicon-remove " aria-hidden="true"></span>
-                        </button>
-                        <span className={classes}>{this.state.text}</span>
-
-
-
-            </li>
+        return (
+           <div className="ms-Grid-row">
+                <ul className="ms-List ">
+                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                        <div className={listItemClasses}>
+                            <div onClick={this.toggleCheck} className="ms-ListItem-selectionTarget js-toggleSelection shot-list-checkbox"></div>
+                            <span className="ms-ListItem-secondaryText"></span>
+                            <span className={listItemTextClasses}>{this.state.text} </span>
+                            <div className="ms-ListItem-actions adjustDeleteIconPosition">
+                                <div className="ms-ListItem-action"><i onClick={this.deleteItem} className="ms-Icon ms-Icon--trash"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                </ul>
+            </div>
         );
     }
 });
 var List = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             listName: "",
             listItems: [],
             counter: 0
         };
     },
-    componenetDidUpdate: function(){
-       
+    componenetDidUpdate: function () {
+
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
         var context = this;
-       
+
         // check if office is present then get the state from it else set it from localStorage
-        Office.initialize = function(reason) {
-           
+        Office.initialize = function (reason) {
+
             var previousState = StorageLibrary.getValueFromStorage(CONSTANTS.LIST_STATE_KEY);
             context.setState(JSON.parse(previousState));
         };
-       
+
 
     },
-    addItem: function(item) {
+    addItem: function (item) {
         var textValue = item.value;
         /*If List item is empty then return*/
-        if(!textValue) {
+        if (!textValue) {
             console.warn("Empty Item was tried to be inserted");
             return;
         }
@@ -84,17 +101,17 @@ var List = React.createClass({
         this.setState(newState);
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newState));
     },
-    changeListName: function(element) {
+    changeListName: function (element) {
         var newState = this.state;
         newState.listName = element.value;
         this.setState(newState);
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
-    deleteItem: function(element) {
+    deleteItem: function (element) {
         var index = this.state.listItems.indexOf(element.props.itemDetail);
         var length = this.state.listItems.length;
         var newState = this.state;
-        if(length === 1 && index === 0) {
+        if (length === 1 && index === 0) {
             newState.listItems = [];
         } else {
             var oldStateItems = this.state.listItems;
@@ -104,7 +121,7 @@ var List = React.createClass({
         this.setState(newState);
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newState));
     },
-    toggleCheck: function(item) {
+    toggleCheck: function (item) {
         var index = this.state.listItems.indexOf(item.props.itemDetail);
         var oldStateItems = this.state;
         var newList = oldStateItems;
@@ -113,72 +130,79 @@ var List = React.createClass({
         this.setState(newList);
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(newList));
     },
-    reRenderForSavedState: function(savedState) {
+    reRenderForSavedState: function (savedState) {
         this.setState(savedState);
     },
-    render: function() {
+    render: function () {
         var context = this;
-        var listLeftItemsElements = this.state.listItems.map(function(item) {
-            if(!item.isChecked) {
-                return(<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
+        var uncheckedItemInList = this.state.listItems.map(function (item) {
+            if (!item.isChecked) {
+                return (<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
             }
         });
-        var listDoneItemsElements = this.state.listItems.map(function(item) {
-            if(item.isChecked) {
-                return(<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
+        var checkedItemInList = this.state.listItems.map(function (item) {
+            if (item.isChecked) {
+                return (<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
             }
         });
-        return(
-            <div id="list" className="panel panel-primary">
-               <ListHeading key={context.state.listName} className="panel-title" changeListName={context.changeListName} listName={context.state.listName} />
-
-                <div>
-                   <React.addons.CSSTransitionGroup transitionName="fade" transitionAppear={false} className="list-group" component='ul'>
-
-                        <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
-                       {listLeftItemsElements}
-                       {listDoneItemsElements}
-
-                   </React.addons.CSSTransitionGroup>
-                </div>
+        
+       
+       return(
+        <div>
+            <div className="TodoList ">
+            <div className="ms-Grid">
+                 <div className="ms-Grid-row ">
+                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                        <br />
+                    </div>
+                 </div>
+                 <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
+                {uncheckedItemInList}
+                {checkedItemInList}
             </div>
-        );
+            </div>
+         </div>
+            );
     }
 });
 var ListAddTextBox = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             submitBtnClasses: "btn btn-link pull-right hide"
         };
     },
-    showSubmitBtn: function() {
+    showSubmitBtn: function () {
         this.setState({
             submitBtnClasses: "btn btn-link pull-right show"
         });
     },
-    hideSubmitBtn: function() {
+    hideSubmitBtn: function () {
         var listItemInput = React.findDOMNode(this.refs.listItemInput);
-        if(listItemInput.value == "") {
+        if (listItemInput.value == "") {
             this.setState({
                 submitBtnClasses: "btn btn-link pull-right hide"
             });
         }
     },
-    render: function() {
-        return(<form onSubmit={this.addItemToList}>
+    render: function () {
+        return (<form onSubmit={this.addItemToList}>
 
-
-                  <input type="text" className="form-control" ref="listItemInput" tabindex="1" placeholder="Add Item to List" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
-                  <span className="">
-                    <button className={this.state.submitBtnClasses} type="submit">
-                        <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    </button>
-                  </span>
+                <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                        <div className="ms-TextField">
+                            <input  ref="listItemInput" className="ms-TextField-field" type="text"/>
+                            <span className="ms-TextField-description"></span>
+                            <button className="action-btn-on-text-field"><i className="ms-Icon ms-Icon--plus"></i></button>
+                        </div>
+                    </div>
+                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                </div>
 
 
         </form>);
     },
-    addItemToList: function(event) {
+    addItemToList: function (event) {
         event.preventDefault();
         var listItemInput = React.findDOMNode(this.refs.listItemInput);
         this.props.addItem(listItemInput);
@@ -188,30 +212,33 @@ var ListAddTextBox = React.createClass({
     }
 });
 var ListHeading = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             submitBtnClasses: "btn btn-link pull-right hide"
         };
     },
-    componentDidMount: function() {
-        var listName = React.findDOMNode(this.refs.listNameElement);
+    componentDidMount: function () {
+       /* var listName = React.findDOMNode(this.refs.listNameElement);
         listName.value = this.props.listName;
+        */
     },
-    showSubmitBtn: function() {
+    showSubmitBtn: function () {
         this.setState({
             submitBtnClasses: "btn btn-link pull-right show"
         });
     },
-    hideSubmitBtn: function() {
+    hideSubmitBtn: function () {
         var listName = React.findDOMNode(this.refs.listNameElement);
-        if(listName.value == this.props.listName) {
+        if (listName.value == this.props.listName) {
             this.setState({
                 submitBtnClasses: "btn btn-link pull-right hide"
             });
         }
     },
-    render: function() {
-        return(<div className="panel-heading">
+    render: function () {
+        /*TODO: Enhance this*/
+        return (<div></div>);
+       /* return (<div className="panel-heading">
 
                         <form onSubmit={this.changeListName}>
 
@@ -221,8 +248,9 @@ var ListHeading = React.createClass({
                              </button>
                         </form>
         </div>);
+        */
     },
-    changeListName: function(event) {
+    changeListName: function (event) {
         event.preventDefault();
         var listName = React.findDOMNode(this.refs.listNameElement);
         this.props.changeListName(listName);
@@ -230,36 +258,37 @@ var ListHeading = React.createClass({
     }
 });
 var ListPannel = React.createClass({
-    render: function() {
-        return(<div>
+    render: function () {
+        return (<div>
 
                         <List />
+
         </div>);
     }
 });
 var NavBar = React.createClass({
-    componentDidMount: function() {
-        $("[data-toggle=tooltip]").tooltip();
-    },
+    componentDidMount: function () {
+           },
     clearList: function () {
 
         console.log(List);
         List.bind(null);
     },
-    
-    render: function() {
-        return(<nav className="navbar navbar-inverse">
-                        <div className="container-fluid">
 
-                         
-
-                        </div>
-        </nav>);
+    render: function () {
+        return (
+             <div className="ms-Grid ms-bgColor-themeDarker ms-u-fadeIn500" style={{height: 50 + 'px'}}>
+                    <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-u-sm6 ms-u-md8 ms-u-lg10"></div>
+                        <div className="ms-Grid-col ms-u-sm6 ms-u-md4 ms-u-lg2"></div>
+                    </div>
+             </div>
+        );
     }
 });
 var App = React.createClass({
-    render: function() {
-        return(<div>
+    render: function () {
+        return (<div>
                         <NavBar />
                         <div className="container">
                             <ListPannel />
