@@ -7,8 +7,8 @@
         data.isChecked = this.props.itemDetail.isChecked;
         data.text = this.props.itemDetail.text;
         this.setState(data);
-       
-        
+
+
     },
     deleteItem: function () {
         this.props.deleteItem(this);
@@ -30,16 +30,16 @@
             'is-unread': !this.state.isChecked,
             'is-selectable': true,
             'ms-u-fadeIn500': true,
-            'adjustCheckIconPosition':true,
+            'adjustCheckIconPosition': true,
             'ms-bgColor-white': true,
-            'whiteBackground':true
+            'whiteBackground': true
         });
         var listItemTextClasses = cx({
             'ms-ListItem-tertiaryTextCustom': true,
             'strike-through': this.state.isChecked
         });
         return (
-           <div className="ms-Grid-row">
+            <div className="ms-Grid-row">
                 <ul className="ms-List ">
                     <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
                     <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
@@ -66,8 +66,9 @@ var List = React.createClass({
             counter: 0
         };
     },
-    componenetDidUpdate: function () {
-
+    clearListSubscriber: function (msg, data) {
+        console.log(msg, data)
+        this.setState(this.getInitialState());
     },
     componentDidMount: function () {
         var context = this;
@@ -78,6 +79,7 @@ var List = React.createClass({
             var previousState = StorageLibrary.getValueFromStorage(CONSTANTS.LIST_STATE_KEY);
             context.setState(JSON.parse(previousState));
         };
+        this.token = PubSub.subscribe('CLEAR LIST', this.clearListSubscriber);
 
 
     },
@@ -145,24 +147,24 @@ var List = React.createClass({
                 return (<ListItem key={item.key} deleteItem={context.deleteItem} toggleCheck={context.toggleCheck} itemDetail={item} />);
             }
         });
-        
-       
-       return(
-        <div>
-            <div className="TodoList ">
-            <div className="ms-Grid">
-                 <div className="ms-Grid-row ">
-                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
-                        <br />
+
+
+        return (
+            <div>
+                <div className="TodoList ">
+                    <div className="ms-Grid">
+                        <div className="ms-Grid-row ">
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                                <br />
+                            </div>
+                        </div>
+                        <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
+                        {uncheckedItemInList}
+                        {checkedItemInList}
                     </div>
-                 </div>
-                 <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
-                {uncheckedItemInList}
-                {checkedItemInList}
+                </div>
             </div>
-            </div>
-         </div>
-            );
+        );
     }
 });
 var ListAddTextBox = React.createClass({
@@ -187,17 +189,17 @@ var ListAddTextBox = React.createClass({
     render: function () {
         return (<form onSubmit={this.addItemToList}>
 
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
-                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
-                        <div className="ms-TextField">
-                            <input  ref="listItemInput" className="ms-TextField-field" type="text"/>
-                            <span className="ms-TextField-description"></span>
-                            <button className="action-btn-on-text-field"><i className="ms-Icon ms-Icon--plus"></i></button>
-                        </div>
+            <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                    <div className="ms-TextField">
+                        <input ref="listItemInput" className="ms-TextField-field" type="text" />
+                        <span className="ms-TextField-description"></span>
+                        <button className="action-btn-on-text-field"><i className="ms-Icon ms-Icon--plus"></i></button>
                     </div>
-                    <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
                 </div>
+                <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+            </div>
 
 
         </form>);
@@ -218,9 +220,9 @@ var ListHeading = React.createClass({
         };
     },
     componentDidMount: function () {
-       /* var listName = React.findDOMNode(this.refs.listNameElement);
-        listName.value = this.props.listName;
-        */
+        /* var listName = React.findDOMNode(this.refs.listNameElement);
+         listName.value = this.props.listName;
+         */
     },
     showSubmitBtn: function () {
         this.setState({
@@ -238,17 +240,17 @@ var ListHeading = React.createClass({
     render: function () {
         /*TODO: Enhance this*/
         return (<div></div>);
-       /* return (<div className="panel-heading">
-
-                        <form onSubmit={this.changeListName}>
-
-                            <input type="text" ref="listNameElement" className="form-control" placeholder="Enter List Name" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
-                             <button className={this.state.submitBtnClasses} type="submit">
-                                <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                             </button>
-                        </form>
-        </div>);
-        */
+        /* return (<div className="panel-heading">
+ 
+                         <form onSubmit={this.changeListName}>
+ 
+                             <input type="text" ref="listNameElement" className="form-control" placeholder="Enter List Name" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
+                              <button className={this.state.submitBtnClasses} type="submit">
+                                 <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                              </button>
+                         </form>
+         </div>);
+         */
     },
     changeListName: function (event) {
         event.preventDefault();
@@ -261,38 +263,49 @@ var ListPannel = React.createClass({
     render: function () {
         return (<div>
 
-                        <List />
+            <List />
 
         </div>);
     }
 });
 var NavBar = React.createClass({
     componentDidMount: function () {
-           },
+    },
     clearList: function () {
 
         console.log(List);
         List.bind(null);
     },
+    triggerClearList: function () {
 
+        PubSub.publish('CLEAR LIST', 'CLEAR LIST');
+    },
     render: function () {
         return (
-             <div className="ms-Grid ms-bgColor-themeDarker ms-u-fadeIn500" style={{height: 50 + 'px'}}>
-                    <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-u-sm6 ms-u-md8 ms-u-lg10"></div>
-                        <div className="ms-Grid-col ms-u-sm6 ms-u-md4 ms-u-lg2"></div>
+            <div className="ms-Grid ms-bgColor-themeDarker ms-u-fadeIn500" style={{ height: 50 + 'px' }}>
+                <div className="ms-Grid-row" style={{ height: 100 + '%' }}>
+                    <div className="ms-Grid-col ms-u-sm6 ms-u-md8 ms-u-lg10">
+
+                        <button onClick={this.triggerClearList} className="ms-Button ms-Button--hero">
+                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--trash ms-font-xxl ms-fontColor-themeLighterAlt ms-fontColor-themeLight--hover " aria-hidden="true"></i></span>
+
+                        </button>
+
                     </div>
-             </div>
+                    <div className="ms-Grid-col ms-u-sm6 ms-u-md4 ms-u-lg2"></div>
+                </div>
+            </div>
         );
+
     }
 });
 var App = React.createClass({
     render: function () {
         return (<div>
-                        <NavBar />
-                        <div className="container">
-                            <ListPannel />
-                        </div>
+            <NavBar />
+            <div className="container">
+                <ListPannel />
+            </div>
         </div>);
     }
 });

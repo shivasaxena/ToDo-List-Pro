@@ -44,7 +44,6 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="ToDo List ProManifest\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{12fe3879-031d-497c-a310-e6b3c779ce46}</SharePointProjectItemId>
     </None>
