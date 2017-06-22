@@ -69,6 +69,7 @@ var List = React.createClass({
     clearListSubscriber: function (msg, data) {
         console.log(msg, data)
         this.setState(this.getInitialState());
+        StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
     componentDidMount: function () {
         var context = this;
@@ -79,7 +80,7 @@ var List = React.createClass({
             var previousState = StorageLibrary.getValueFromStorage(CONSTANTS.LIST_STATE_KEY);
             context.setState(JSON.parse(previousState));
         };
-        this.token = PubSub.subscribe('CLEAR LIST', this.clearListSubscriber);
+        this.token = PubSub.subscribe(CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_KEY, this.clearListSubscriber);
 
 
     },
@@ -271,28 +272,34 @@ var ListPannel = React.createClass({
 var NavBar = React.createClass({
     componentDidMount: function () {
     },
-    clearList: function () {
-
-        console.log(List);
-        List.bind(null);
-    },
     triggerClearList: function () {
 
-        PubSub.publish('CLEAR LIST', 'CLEAR LIST');
+        PubSub.publish(CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_KEY, CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_MESSAGE);
     },
     render: function () {
         return (
-            <div className="ms-Grid ms-bgColor-themeDarker ms-u-fadeIn500" style={{ height: 50 + 'px' }}>
+            <div className="ms-Grid ms-bgColor-themePrimary ms-u-fadeIn500" style={{ height: 3 + 'em' }}>
                 <div className="ms-Grid-row" style={{ height: 100 + '%' }}>
-                    <div className="ms-Grid-col ms-u-sm6 ms-u-md8 ms-u-lg10">
-
-                        <button onClick={this.triggerClearList} className="ms-Button ms-Button--hero">
-                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--trash ms-font-xxl ms-fontColor-themeLighterAlt ms-fontColor-themeLight--hover " aria-hidden="true"></i></span>
-
-                        </button>
+                    <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
 
                     </div>
-                    <div className="ms-Grid-col ms-u-sm6 ms-u-md4 ms-u-lg2"></div>
+                    <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
+
+                    </div>
+                    <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
+
+                    </div>
+
+                    <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
+
+                    </div>
+
+                    <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
+                        <button style={{ margin: 0.5 + 'em ' + 0 }} title="Clear List" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
+                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--xCircle ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
+                        </button>
+                    </div>
+                   
                 </div>
             </div>
         );

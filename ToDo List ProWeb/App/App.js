@@ -34,6 +34,8 @@ var app = (function () {
 
 CONSTANTS = {
 
-    "LIST_STATE_KEY": "listState"
+    "LIST_STATE_KEY": "listState",
+    "CLEAR_LIST_ACTION_TRIGGER_KEY": "CLEAR_LIST_ACTION_TRIGGER",
+    "CLEAR_LIST_ACTION_MESSAGE":"CLEAR_LIST_ACTION_MESSAGE"
 
 };

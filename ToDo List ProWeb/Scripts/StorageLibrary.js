@@ -5,10 +5,6 @@
 // Create a "utility class" for the storage functions.
 var StorageLibrary = (function () {
 
-    var KEY_WORD_MESSAGE_STORAGE = "WordHostMessage";
-    var KEY_WORD_ONLINE_STORAGE_KEY = "";
-    var DOCUMENT_URL_KEY = "UniqueId"
-
     // Stores the settings in the JavaScript APIs for Office property bag,if not availabe then to local storage 
     //and if localstorage is not present too then in the document
 
@@ -25,15 +21,11 @@ var StorageLibrary = (function () {
     function saveValueIntoStorage(key, value) {
 
 
-        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
+        if (Office.context.document && Office.context.document.settings) {
             Office.context.document.settings.set(key, value);
             Office.context.document.settings.saveAsync(function (asyncResult) {
                 console.log('Settings saved with status: ' + asyncResult.status);
             });
-
-            //Check if its Word Online than save a copy in the local storage and display a message
-
-            
 
         } else if (lsTest() === true) {
             saveToLocalStorage(key, value);
@@ -51,7 +43,7 @@ var StorageLibrary = (function () {
 
     function getValueFromStorage(key) {
 
-        if (Office.context.document && Office.context.document.settings && Office.context.requirements.isSetSupported("Settings", 1.1)) {
+        if (Office.context.document && Office.context.document.settings) {
 
             //try to retrive the value from settings if not present in case of word fall back to localstorage
             var returnValue = getFromPropertyBag(key);

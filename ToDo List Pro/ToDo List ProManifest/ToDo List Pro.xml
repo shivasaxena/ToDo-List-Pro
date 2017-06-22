@@ -13,6 +13,7 @@
   <Hosts>
     <Host Name="Workbook" />
     <Host Name="Presentation" />
+    <Host Name="Document" />
   </Hosts>
   <Requirements>
     <Sets>
