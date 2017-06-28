@@ -48,7 +48,7 @@
                             <span className="ms-ListItem-secondaryText"></span>
                             <span className={listItemTextClasses}>{this.state.text} </span>
                             <div className="ms-ListItem-actions adjustDeleteIconPosition">
-                                <div className="ms-ListItem-action"><i onClick={this.deleteItem} className="ms-Icon ms-Icon--trash"></i></div>
+                                <div className="ms-ListItem-action"><i title="Delete This Item"  onClick={this.deleteItem} className="ms-Icon ms-Icon--xCircle ms-font-l ms-fontColor-themePrimary"></i></div>
                             </div>
                         </div>
                     </div>
@@ -273,7 +273,6 @@ var NavBar = React.createClass({
     componentDidMount: function () {
     },
     triggerClearList: function () {
-
         PubSub.publish(CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_KEY, CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_MESSAGE);
     },
     render: function () {
@@ -295,8 +294,8 @@ var NavBar = React.createClass({
                     </div>
 
                     <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
-                        <button style={{ margin: 0.5 + 'em ' + 0 }} title="Clear List" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
-                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--xCircle ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
+                        <button style={{ margin: 0.5 + 'em ' + 0 }} title="Delete All Items" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
+                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--trash ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
                         </button>
                     </div>
                    
