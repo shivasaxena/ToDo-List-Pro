@@ -3,6 +3,9 @@
     margin: 0;
 }
 
+::-ms-clear {
+    display: none;
+}
 .action-btn-on-text-field {
     border: none;
     cursor: pointer;
@@ -15,6 +18,28 @@
     text-align: center;
     color: #fff;
     z-index: 3;
+}
+
+/*remove this*/
+.action-btn-on-text-field-listName {
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    height: 28px;
+    width: 28px;
+    background-color: transparent;
+    color: #fff;
+    z-index: 3;
+}
+
+#list-name-input-field {
+    text-align: center;
+    color: white;
+    vertical-align: top;
+    font-size: 18px;
+    line-height: 18px;
 }
 
 .ms-ListItem-tertiaryTextCustom {

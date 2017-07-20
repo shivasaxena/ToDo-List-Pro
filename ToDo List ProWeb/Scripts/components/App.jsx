@@ -61,13 +61,12 @@
 var List = React.createClass({
     getInitialState: function () {
         return {
-            listName: "",
+            listName: "My ToDo List",
             listItems: [],
             counter: 0
         };
     },
     clearListSubscriber: function (msg, data) {
-        console.log(msg, data)
         this.setState(this.getInitialState());
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
@@ -159,6 +158,7 @@ var List = React.createClass({
                                 <br />
                             </div>
                         </div>
+                        <ListHeading key={context.state.listName} changeListName={context.changeListName} listName={context.state.listName}/>
                         <ListAddTextBox key="ListAddTextBox" addItem={context.addItem} />
                         {uncheckedItemInList}
                         {checkedItemInList}
@@ -191,7 +191,7 @@ var ListAddTextBox = React.createClass({
         return (<form onSubmit={this.addItemToList}>
 
             <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
+                <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"> <br/> </div>
                 <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
                     <div className="ms-TextField">
                         <input ref="listItemInput" className="ms-TextField-field" type="text" />
@@ -217,41 +217,45 @@ var ListAddTextBox = React.createClass({
 var ListHeading = React.createClass({
     getInitialState: function () {
         return {
-            submitBtnClasses: "btn btn-link pull-right hide"
+            submitBtnClasses: "action-btn-on-text-field-listName hide"
         };
     },
     componentDidMount: function () {
-        /* var listName = React.findDOMNode(this.refs.listNameElement);
+         var listName = React.findDOMNode(this.refs.listNameElement);
          listName.value = this.props.listName;
-         */
+        
     },
     showSubmitBtn: function () {
         this.setState({
-            submitBtnClasses: "btn btn-link pull-right show"
+            submitBtnClasses: "action-btn-on-text-field-listName show"
         });
     },
     hideSubmitBtn: function () {
         var listName = React.findDOMNode(this.refs.listNameElement);
         if (listName.value == this.props.listName) {
             this.setState({
-                submitBtnClasses: "btn btn-link pull-right hide"
+                submitBtnClasses: "action-btn-on-text-field-listName hide"
             });
         }
     },
     render: function () {
-        /*TODO: Enhance this*/
-        return (<div></div>);
-        /* return (<div className="panel-heading">
- 
-                         <form onSubmit={this.changeListName}>
- 
-                             <input type="text" ref="listNameElement" className="form-control" placeholder="Enter List Name" onFocus={this.showSubmitBtn} onBlur={this.hideSubmitBtn} />
-                              <button className={this.state.submitBtnClasses} type="submit">
-                                 <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                              </button>
-                         </form>
-         </div>);
-         */
+        return (
+
+            <form onSubmit={this.changeListName} placeholder="Enter List Name"  onBlur={this.changeListName}>
+
+                <div className="ms-Grid-row">
+                    
+                    <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
+                        <div className="ms-bgColor-themePrimary">
+                            <input id="list-name-input-field" ref="listNameElement" className="ms-TextField-field ms-bgColor-themePrimary" type="text" />
+                            <span className="ms-TextField-description"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            );
+         
     },
     changeListName: function (event) {
         event.preventDefault();
