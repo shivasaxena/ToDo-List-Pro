@@ -14,7 +14,6 @@
         this.props.deleteItem(this);
     },
     toggleCheck: function () {
-        console.log("called");
         if (this.state.isChecked) {
             this.state.isChecked = false;
         } else {
@@ -67,6 +66,7 @@ var List = React.createClass({
         };
     },
     clearListSubscriber: function (msg, data) {
+        debugger;
         this.setState(this.getInitialState());
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
@@ -275,10 +275,25 @@ var ListPannel = React.createClass({
 });
 var NavBar = React.createClass({
     componentDidMount: function () {
+
+        this.token = PubSub.subscribe(CONSTANTS.DIALOG_MESSAGE_COMPONENT_CLEAR_BUTTON, this.handleSubscription);
+
+    },
+    handleSubscription: function (event, message) {
+        if (event === CONSTANTS.DIALOG_MESSAGE_COMPONENT_CLEAR_BUTTON && message === CONSTANTS.OK_MESSAGE_VALUE) {
+            PubSub.publish(CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_KEY, CONSTANTS.CLEAR_LIST_ACTION_MESSAGE);
+        } else if (event === CONSTANTS.DIALOG_MESSAGE_COMPONENT_CLEAR_BUTTON && message === CONSTANTS.CLEAR_MESSAGE_VALUE) {
+            //NOP
+        }
+
     },
     triggerClearList: function () {
 
-        PubSub.publish(CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_KEY, CONSTANTS.CLEAR_LIST_ACTION_TRIGGER_MESSAGE);
+        // the convention is to publish message with event and pass the component name as the second parameter
+        MessageToDialogBox.MessageTriggerElement = CONSTANTS.DIALOG_MESSAGE_COMPONENT_CLEAR_BUTTON;
+        MessageToDialogBox.MessageHeading = "Delete the entire list?"
+        MessageToDialogBox.MessageBodyContent = "Are you sure that you want to delete the entire list content? <br/> Click OK to confirm or CANCEL to cancel the action";
+        PubSub.publish(CONSTANTS.DLALOG_MESSAGE_TRIGGER_KEY, MessageToDialogBox);
     },
     render: function () {
         return (
@@ -300,7 +315,7 @@ var NavBar = React.createClass({
 
                     <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
                         <button style={{ margin: 0.5 + 'em ' + 0 }} title="Clear List" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
-                            <span class="ms-Button-icon"> <i className="ms-Icon ms-Icon--xCircle ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
+                            <span> <i className="ms-Icon ms-Icon--xCircle ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
                         </button>
                     </div>
                    
@@ -310,13 +325,81 @@ var NavBar = React.createClass({
 
     }
 });
+
+var DialogBox = React.createClass({
+    componentDidMount: function () {
+        var DialogElements = document.querySelectorAll(".ms-Dialog");
+        
+        if ($.fn.Dialog) {
+            $(".ms-Dialog").Dialog();
+         }
+
+        this.token = PubSub.subscribe(CONSTANTS.DLALOG_MESSAGE_TRIGGER_KEY, this.showDialogBox);
+    },
+    showDialogBox: function (message, envokingPublisherMessage) {
+        debugger;
+        this.envokingPublisher = envokingPublisherMessage.MessageTriggerElement;
+        this.MessageBodyContent = envokingPublisherMessage.MessageBodyContent;
+        var MessageHeading = React.findDOMNode(this.refs.MessageDialogBoxHeading);
+        MessageHeading.innerHTML  = envokingPublisherMessage.MessageHeading;
+        var MessageBodyContent = React.findDOMNode(this.refs.MessageDialogBoxContent);
+        MessageBodyContent.innerHTML = envokingPublisherMessage.MessageBodyContent;
+        //FIXME: get element by id and not by list
+        $(".ms-Dialog").Dialog().show();
+    },
+    publishOkResponse: function () {
+        PubSub.publish(this.envokingPublisher, CONSTANTS.OK_MESSAGE_VALUE);
+    },
+    publishCancelResponse: function () {
+        PubSub.publish(this.envokingPublisher, CONSTANTS.CANCEL_MESSAGE_VALUE);
+        this.envokingPublisher = null;
+        $(".ms-Dialog").Dialog().hide();
+        debugger;
+    },
+    render: function () {
+
+        return (
+            
+            <div className="ms-Dialog">
+                <div className="ms-Overlay"></div>
+                <div className="ms-Dialog-main">
+                    <button className="ms-Dialog-button ms-Dialog-button--close">
+                        <i className="ms-Icon ms-Icon--x"></i>
+                    </button>
+                    <div className="ms-Dialog-header">
+                        <p className="ms-Dialog-title" ref="MessageDialogBoxHeading"></p>
+                    </div>
+                    <div className="ms-Dialog-inner">
+                        <div className="ms-Dialog-content">
+                            <p className="ms-Dialog-subText" ref="MessageDialogBoxContent"></p>
+                        </div>
+                        <div className="ms-Dialog-actions">
+                            <div className="ms-Dialog-actionsRight">
+                                <button className="ms-Dialog-action on ms-Button ms-Button--primary" onClick={this.publishOkResponse}>
+                                    <span className="ms-Button-label">OK</span>
+                                </button>
+                                <button className="ms-Dialog-action ms-Button" onClick={this.publishCancelResponse}>
+                                    <span className="ms-Button-label">Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+        
+       );
+    }
+
+});
 var App = React.createClass({
+
     render: function () {
         return (<div>
             <NavBar />
             <div className="container">
                 <ListPannel />
             </div>
+            <DialogBox/>
         </div>);
     }
 });
