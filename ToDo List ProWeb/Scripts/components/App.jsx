@@ -47,7 +47,7 @@
                             <span className="ms-ListItem-secondaryText"></span>
                             <span className={listItemTextClasses}>{this.state.text} </span>
                             <div className="ms-ListItem-actions adjustDeleteIconPosition">
-                                <div className="ms-ListItem-action"><i onClick={this.deleteItem} className="ms-Icon ms-Icon--trash"></i></div>
+                                <div className="ms-ListItem-action"><i title="Delete This Item"  onClick={this.deleteItem} className="ms-Icon ms-Icon--xCircle ms-font-l ms-fontColor-themePrimary"></i></div>
                             </div>
                         </div>
                     </div>
