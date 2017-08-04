@@ -314,8 +314,8 @@ var NavBar = React.createClass({
                     </div>
 
                     <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
-                        <button style={{ margin: 0.5 + 'em ' + 0 }} title="Clear List" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
-                            <span> <i className="ms-Icon ms-Icon--xCircle ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
+                        <button style={{ margin: 0.5 + 'em ' + 0 }} title="Delete All Items" onClick={this.triggerClearList} className="ms-Button ms-Button--hero ms-fontColor-themeLight--hover">
+                            <span> <i className="ms-Icon ms-Icon--trash ms-font-xxl ms-fontColor-themeLighterAlt" aria-hidden="true"></i></span>
                         </button>
                     </div>
                    
