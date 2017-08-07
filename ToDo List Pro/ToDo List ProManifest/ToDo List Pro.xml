@@ -6,7 +6,7 @@
   <ProviderName>Shiva Saxena</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="ToDo List Pro" />
-  <Description DefaultValue="An Office app to maintain ToDo List in Excel worksheets and PowerPoint presentations"/>
+  <Description DefaultValue="An Office app to maintain ToDo List in Word document, Excel worksheets and PowerPoint presentations"/>
   <IconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon32X32.png" />
   <HighResolutionIconUrl DefaultValue="~remoteAppUrl/Images/TODO-List-icon64x64.png" />
   <SupportUrl DefaultValue="https://metalop.com/ToDo-List-Pro/#support" />

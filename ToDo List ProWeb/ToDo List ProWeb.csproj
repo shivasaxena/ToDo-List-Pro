@@ -123,7 +123,6 @@
     <Content Include="App\Home\Home.html" />
     <Content Include="App\Home\Home.css" />
     <Content Include="App\Home\Home.js" />
-    <Content Include="Content\Office.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\Close.png" />
     <Content Include="Images\TODO-List-icon32X32.png" />
@@ -378,6 +377,7 @@
     <Content Include="Scripts\StorageLibrary.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\toastr.min.js" />
+	<Content Include="Scripts\pubsub.js" />
     <Content Include="Scripts\_officeintellisense.js" />
     <Content Include="Web.config" />
   </ItemGroup>

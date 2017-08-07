@@ -68,8 +68,8 @@
 }
 
 .adjustDeleteIconPosition.ms-ListItem-actions {
-    top: 8px;
-    right: 16px;
+    top: 5px;
+    right: 10px;
 }
 
 .ms-ListItem.is-selectable.whiteBackground:hover{
