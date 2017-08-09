@@ -66,7 +66,6 @@ var List = React.createClass({
         };
     },
     clearListSubscriber: function (msg, data) {
-        debugger;
         this.setState(this.getInitialState());
         StorageLibrary.saveValueIntoStorage(CONSTANTS.LIST_STATE_KEY, JSON.stringify(this.state));
     },
@@ -84,7 +83,8 @@ var List = React.createClass({
 
     },
     addItem: function (item) {
-        var textValue = item.value;
+        var textValue = item.value ? item.value.trim() : null;
+
         /*If List item is empty then return*/
         if (!textValue) {
             console.warn("Empty Item was tried to be inserted");
@@ -337,14 +337,13 @@ var DialogBox = React.createClass({
         this.token = PubSub.subscribe(CONSTANTS.DLALOG_MESSAGE_TRIGGER_KEY, this.showDialogBox);
     },
     showDialogBox: function (message, envokingPublisherMessage) {
-        debugger;
         this.envokingPublisher = envokingPublisherMessage.MessageTriggerElement;
         this.MessageBodyContent = envokingPublisherMessage.MessageBodyContent;
         var MessageHeading = React.findDOMNode(this.refs.MessageDialogBoxHeading);
         MessageHeading.innerHTML  = envokingPublisherMessage.MessageHeading;
         var MessageBodyContent = React.findDOMNode(this.refs.MessageDialogBoxContent);
         MessageBodyContent.innerHTML = envokingPublisherMessage.MessageBodyContent;
-        //FIXME: get element by id and not by list
+        //TODO: get element by id and not by list
         $(".ms-Dialog").Dialog().show();
     },
     publishOkResponse: function () {
@@ -354,7 +353,6 @@ var DialogBox = React.createClass({
         PubSub.publish(this.envokingPublisher, CONSTANTS.CANCEL_MESSAGE_VALUE);
         this.envokingPublisher = null;
         $(".ms-Dialog").Dialog().hide();
-        debugger;
     },
     render: function () {
 
