@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <TargetOfficeVersion>15.0</TargetOfficeVersion>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +71,11 @@
     <Content Include="Content\OfficeThemes.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="Images\TODO-List-icon16x16.png" />
+    <Content Include="Images\TODO-List-icon200x200.png" />
+    <Content Include="Images\TODO-List-icon32X32.png" />
+    <Content Include="Images\TODO-List-icon64x64.png" />
+    <Content Include="Images\TODO-List-icon80x80.png" />
     <Content Include="Scripts\components\App.jsx" />
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
@@ -126,8 +132,6 @@
     <Content Include="App\Home\Home.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\Close.png" />
-    <Content Include="Images\TODO-List-icon32X32.png" />
-    <Content Include="Images\TODO-List-icon64x64.png" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
