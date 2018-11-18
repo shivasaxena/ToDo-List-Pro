@@ -23,7 +23,7 @@
     },
     render: function () {
         var cx = React.addons.classSet;
-        var listItemClasses = cx({
+        const listItemClassesObject = {
             'is-selected': this.state.isChecked,
             'ms-ListItem': true,
             'is-unread': !this.state.isChecked,
@@ -31,12 +31,31 @@
             'ms-u-fadeIn500': true,
             'adjustCheckIconPosition': true,
             'ms-bgColor-white': true,
-            'whiteBackground': true
-        });
+            'whiteBackground': true,
+            'ms-borderColor-green !important': true
+        };
+
+        var listItemClasses = cx(listItemClassesObject);
+        var listItemDeleteButtonClassesObject = {
+            'ms-Icon': true,
+            'ms-Icon--xCircle': true,
+            'ms-font-l': true
+            
+        }
+        Utilities.addThemeColorFontToCssClassObject(listItemDeleteButtonClassesObject);
+        var listItemDeleteButtonClasses = cx(listItemDeleteButtonClassesObject);
+       
+
+        let listHeadingCssClassObjects = {
+            'ms-TextField-field': true
+        };
+
+        
         var listItemTextClasses = cx({
             'ms-ListItem-tertiaryTextCustom': true,
             'strike-through': this.state.isChecked
         });
+
         return (
             <div className="ms-Grid-row">
                 <ul className="ms-List ">
@@ -44,10 +63,10 @@
                     <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
                         <div className={listItemClasses}>
                             <div onClick={this.toggleCheck} className="ms-ListItem-selectionTarget js-toggleSelection shot-list-checkbox"></div>
-                            <span className="ms-ListItem-secondaryText"></span>
+                            <span className="ms-bgColor-green"></span>
                             <span className={listItemTextClasses}>{this.state.text} </span>
                             <div className="ms-ListItem-actions adjustDeleteIconPosition">
-                                <div className="ms-ListItem-action"><i title="Delete This Item"  onClick={this.deleteItem} className="ms-Icon ms-Icon--xCircle ms-font-l ms-fontColor-themePrimary"></i></div>
+                                <div className="ms-ListItem-action"><i title="Delete This Item" onClick={this.deleteItem} className={listItemDeleteButtonClasses}></i></div>
                             </div>
                         </div>
                     </div>
@@ -188,6 +207,14 @@ var ListAddTextBox = React.createClass({
         }
     },
     render: function () {
+
+        var cx = React.addons.classSet;
+        let addButtonCssClassObjects = {
+            'action-btn-on-text-field': true
+        };
+        Utilities.addThemeFieldToThemeClassObject(addButtonCssClassObjects);
+        let addButtonCssClass = cx(addButtonCssClassObjects);
+
         return (<form onSubmit={this.addItemToList}>
 
             <div className="ms-Grid-row">
@@ -196,7 +223,7 @@ var ListAddTextBox = React.createClass({
                     <div className="ms-TextField">
                         <input ref="listItemInput" className="ms-TextField-field" type="text" />
                         <span className="ms-TextField-description"></span>
-                        <button className="action-btn-on-text-field"><i className="ms-Icon ms-Icon--plus"></i></button>
+                        <button className={addButtonCssClass}><i className="ms-Icon ms-Icon--plus"></i></button>
                     </div>
                 </div>
                 <div className="ms-Grid-col ms-u-sm1 ms-u-md1 ms-u-lg1"></div>
@@ -239,6 +266,14 @@ var ListHeading = React.createClass({
         }
     },
     render: function () {
+
+        var cx = React.addons.classSet;
+        let listHeadingCssClassObjects = {
+            'ms-TextField-field': true
+        };
+        Utilities.addThemeFieldToThemeClassObject(listHeadingCssClassObjects);
+        let listHeadingCssClass = cx(listHeadingCssClassObjects);
+
         return (
 
             <form onSubmit={this.changeListName} placeholder="Enter List Name"  onBlur={this.changeListName}>
@@ -246,8 +281,8 @@ var ListHeading = React.createClass({
                 <div className="ms-Grid-row">
                     
                     <div className="ms-Grid-col ms-u-sm12 ms-u-md10 ms-u-lg12 ">
-                        <div className="ms-bgColor-themePrimary">
-                            <input id="list-name-input-field" ref="listNameElement" className="ms-TextField-field ms-bgColor-themePrimary" type="text" />
+                        <div>
+                            <input id="list-name-input-field" ref="listNameElement" className={listHeadingCssClass} type="text" />
                             <span className="ms-TextField-description"></span>
                         </div>
                     </div>
@@ -296,8 +331,17 @@ var NavBar = React.createClass({
         PubSub.publish(CONSTANTS.DLALOG_MESSAGE_TRIGGER_KEY, MessageToDialogBox);
     },
     render: function () {
+
+        var cx = React.addons.classSet;
+        let navBarClassesObject = {
+            "ms-Grid": true,
+            "ms-u-fadeIn500": true
+        };
+        Utilities.addThemeFieldToThemeClassObject(navBarClassesObject);
+        var navBarClasses = cx(navBarClassesObject);
+
         return (
-            <div className="ms-Grid ms-bgColor-themePrimary ms-u-fadeIn500" style={{ height: 3 + 'em' }}>
+            <div id="NavBar" className={navBarClasses} style={{ height: 3 + 'em' }}>
                 <div className="ms-Grid-row" style={{ height: 100 + '%' }}>
                     <div className="ms-Grid-col ms-u-sm2 ms-u-md2 ms-u-lg2">
 
@@ -356,6 +400,7 @@ var DialogBox = React.createClass({
     },
     render: function () {
 
+      
         return (
             
             <div className="ms-Dialog">
@@ -373,7 +418,7 @@ var DialogBox = React.createClass({
                         </div>
                         <div className="ms-Dialog-actions">
                             <div className="ms-Dialog-actionsRight">
-                                <button className="ms-Dialog-action on ms-Button ms-Button--primary" onClick={this.publishOkResponse}>
+                                <button className="ms-Dialog-action on ms-Button ms-Button--primary ms-bgColor-green" onClick={this.publishOkResponse}>
                                     <span className="ms-Button-label">OK</span>
                                 </button>
                                 <button className="ms-Dialog-action ms-Button" onClick={this.publishCancelResponse}>

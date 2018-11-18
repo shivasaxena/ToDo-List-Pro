@@ -173,7 +173,7 @@
             <!-- Title of the Getting Started callout. The resid attribute points to a ShortString resource -->
             <Title resid="ToDoListPro.GetStarted.Title"/>
 
-            <!-- Description of the Getting Started callout. resid points to a LongString resource -->
+            <!-- Description of the Getting Started callout. resid points to a LongString resource --> 
             <Description resid="ToDoListPro.Description"/>
 
             <!-- Points to a URL resource which details how the add-in should be used. -->

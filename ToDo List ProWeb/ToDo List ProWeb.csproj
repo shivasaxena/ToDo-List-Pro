@@ -114,6 +114,7 @@
     <Content Include="Content\sass\Fabric.Animations.Output.scss" />
     <None Include="Properties\PublishProfiles\ToDo-List-Pro-Alternate.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\Utilities.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -428,6 +429,8 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\pubsub.js" />
     <Content Include="Scripts\_officeintellisense.js" />
+    <Content Include="Functions\FunctionFile.html" />
+    <Content Include="Functions\FunctionFile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

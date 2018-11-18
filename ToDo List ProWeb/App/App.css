@@ -14,7 +14,6 @@
     top: 0;
     height: 32px;
     width: 32px;
-    background-color: #0078d7;
     text-align: center;
     color: #fff;
     z-index: 3;
@@ -51,9 +50,9 @@
     padding-right: 30px;
 }
 
-    .ms-ListItem-tertiaryTextCustom.strike-through {
-        text-decoration: line-through;
-    }
+.ms-ListItem-tertiaryTextCustom.strike-through {
+    text-decoration: line-through;
+}
 
 .ms-ListItem-selectionTarget {
     display: block;
@@ -75,3 +74,31 @@
 .ms-ListItem.is-selectable.whiteBackground:hover{
     background-color:#DEECF9;
 }
+
+.ms-ListItem.is-unread {
+    border-left: 3px solid;
+    padding-left: 27px
+}
+
+.ms-Button.ms-Button--primary {
+    background-color: black;
+    border-color: black;
+}
+
+.ms-Button.ms-Button--primary {
+    background-color: black;
+    border-color: black;
+}
+
+.ms-Button.ms-Button--primary:hover {
+    background-color: black;
+    border-color: #aaa;
+}
+
+.ms-Button.ms-Button--primary:focus {
+    background-color: black;
+    border-color: #aaa;
+}
+
+
+
