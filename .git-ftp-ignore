@@ -1,1 +1,2 @@
-* #ignore all files by default until whitelisted in .git-ftp-include
+*.*
+/* #ignore all files by default until whitelisted in .git-ftp-include
