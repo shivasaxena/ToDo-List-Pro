@@ -14,4 +14,3 @@ jobs:
         ftp-server: ftp://${{ secrets.TODO_LIST_PRO_FTP_HOST }}/
         ftp-username: ${{ secrets.TODO_LIST_PRO_FTP_USERNAME }}
         ftp-password: ${{ secrets.TODO_LIST_PRO_FTP_PASSWORD }}
-        git-ftp-args: --dry-run
