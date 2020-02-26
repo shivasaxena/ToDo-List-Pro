@@ -1,0 +1,19 @@
+name: CD
+
+on: push
+name: Publish Website
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      with:
+        ftp-server: ftp://${{ secrets.TODO_LIST_PRO_FTP_HOST }}/
+        ftp-username: ${{ secrets.TODO_LIST_PRO_FTP_USERNAME }}
+        ftp-password: ${{ secrets.TODO_LIST_PRO_FTP_PASSWORD }}
+        git-ftp-args: --dry-run
