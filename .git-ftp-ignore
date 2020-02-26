@@ -1,2 +1,10 @@
-*.*
-/* #ignore all files by default until whitelisted in .git-ftp-include
+.github/workflows
+.vs/config
+.git-ftp-ignore
+.git-ftp-include
+.gitattributes
+.gitignore
+LICENSE.md
+README.md
+ToDo List Pro.sln
+ToDo-List-icon.psd
