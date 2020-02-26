@@ -7,11 +7,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        fetch-depth: 2
+        fetch-depth: 100
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@3.0.0
       with:
-        ftp-server: ftp://${{ secrets.TODO_LIST_PRO_FTP_HOST }}/
+        ftp-server: ftp://${{ secrets.TODO_LIST_PRO_FTP_HOST }}/app/releases/2.0.0/
         ftp-username: ${{ secrets.TODO_LIST_PRO_FTP_USERNAME }}
-        ftp-password: ${{ secrets.TODO_LIST_PRO_FTP_PASSWORD }}
-        --remote-root: app/releases/2.0.0/  
+        ftp-password: ${{ secrets.TODO_LIST_PRO_FTP_PASSWORD }}  
